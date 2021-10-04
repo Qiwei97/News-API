@@ -13,5 +13,5 @@ async def upload_news():
 
 @repeat_every(seconds = 5 * 60)
 def update_news():
-    df = generate_news(period='1M', category='Health')
+    df = generate_news(period='1M', category='Tech')
     df.to_json('News_Scraper/data/news.json', orient='records')
