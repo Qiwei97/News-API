@@ -5,9 +5,6 @@ import time, os
 import pytz
 import numpy as np
 import nltk
-import nltk.data
-
-nltk.data.load("tokenizer/english.pickle") # punkt
 
 def generate_news(period='1M', category='Health'):
 
