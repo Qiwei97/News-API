@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi_restful.tasks import repeat_every
+from News-Scraper.utils import generate_news
 import json
-from utils import generate_news
 
 app = FastAPI()
 
