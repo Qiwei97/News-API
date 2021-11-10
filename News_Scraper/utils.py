@@ -1,10 +1,13 @@
 from GoogleNews import GoogleNews
 from newspaper import Article, Config
 import pandas as pd
-import time, os
+import time
 import pytz
 import numpy as np
 import nltk
+
+config = Config()
+config.MAX_SUMMARY_SENT = 2
 
 def generate_news(period='1M', category='Health'):
 
@@ -13,7 +16,7 @@ def generate_news(period='1M', category='Health'):
     googlenews = GoogleNews(period=period)
     googlenews.search(category)
 
-    for i in range(1):
+    for i in range(3):
         googlenews.get_page(i)
         time.sleep(5)
 
@@ -37,7 +40,7 @@ def generate_news(period='1M', category='Health'):
     for ind in df.index:
         try:
             article_dict = {}
-            article = Article(df['link'][ind])
+            article = Article(df['link'][ind], config=config)
             article.download()
             article.parse()
             article.nlp()
@@ -46,7 +49,7 @@ def generate_news(period='1M', category='Health'):
             article_dict['Link']=df['link'][ind]
             article_dict['Title']=article.title
             article_dict['Article']=article.text
-            article_dict['Summary']=article.summary
+            article_dict['Summary']=article.summary.replace('\n', ' ')
             article_dict['Image']=article.top_image
             news.append(article_dict)
             time.sleep(5)
