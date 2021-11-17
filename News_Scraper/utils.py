@@ -61,7 +61,7 @@ def generate_news(period='1M', category='Health'):
     # Catch cases asking for sign up
     news_df.Summary = news_df.Summary.str.split('.').apply(lambda x: x.pop(0) if ('sign' in x[0]) or ('Sign' in x[0]) else x)
     # Control word count
-    news_df.Summary = news_df.Summary.str.join('.').str.split()[:200].str.join(' ') + '...'
+    news_df.Summary = news_df.Summary.str.join('.').str.split().apply(lambda x: x[:30]).str.join(' ') + '...'
     news_df.replace('', np.nan, inplace=True)
     news_df = news_df.dropna()
     print(len(news_df), " Articles Found.")
