@@ -7,7 +7,7 @@ import numpy as np
 import nltk
 
 config = Config()
-config.MAX_SUMMARY = 150
+config.MAX_SUMMARY_SENT = 2
 config.MIN_WORD_COUNT = 500
 
 def generate_news(period='1M', category='Health'):
@@ -50,7 +50,7 @@ def generate_news(period='1M', category='Health'):
             article_dict['Link'] = df['link'][ind]
             article_dict['Title'] = article.title
             article_dict['Article'] = article.text
-            article_dict['Summary'] = article.summary.replace('\n', ' ') + '...'
+            article_dict['Summary'] = article.summary.replace('\n', ' ')
             article_dict['Image'] = article.top_image
             news.append(article_dict)
             time.sleep(5)
@@ -58,6 +58,10 @@ def generate_news(period='1M', category='Health'):
             pass
 
     news_df = pd.DataFrame(news)
+    # Catch cases asking for sign up
+    news_df.Summary = news_df.Summary.str.split('.').apply(lambda x: x.pop(0) if ('sign' in x[0]) or ('Sign' in x[0]) else x)
+    # Control word count
+    news_df.Summary = news_df.Summary.str.join('.').str.split()[:200].str.join(' ') + '...'
     news_df.replace('', np.nan, inplace=True)
     news_df = news_df.dropna()
     print(len(news_df), " Articles Found.")
