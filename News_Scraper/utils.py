@@ -7,13 +7,14 @@ import numpy as np
 import nltk
 
 config = Config()
-config.MAX_SUMMARY_SENT = 2
+config.MAX_SUMMARY = 150
+config.MIN_WORD_COUNT = 500
 
 def generate_news(period='1M', category='Health'):
 
     # Scrape from Google News
     print("Collecting Latest News...")
-    googlenews = GoogleNews(period=period)
+    googlenews = GoogleNews(period=period, region='SG')
     googlenews.search(category)
 
     for i in range(3):
@@ -44,13 +45,13 @@ def generate_news(period='1M', category='Health'):
             article.download()
             article.parse()
             article.nlp()
-            article_dict['Date']=df['datetime'][ind]
-            article_dict['Media']=df['media'][ind]
-            article_dict['Link']=df['link'][ind]
-            article_dict['Title']=article.title
-            article_dict['Article']=article.text
-            article_dict['Summary']=article.summary.replace('\n', ' ')
-            article_dict['Image']=article.top_image
+            article_dict['Date'] = df['datetime'][ind]
+            article_dict['Media'] = df['media'][ind]
+            article_dict['Link'] = df['link'][ind]
+            article_dict['Title'] = article.title
+            article_dict['Article'] = article.text
+            article_dict['Summary'] = article.summary.replace('\n', ' ') + '...'
+            article_dict['Image'] = article.top_image
             news.append(article_dict)
             time.sleep(5)
         except:
