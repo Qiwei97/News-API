@@ -12,6 +12,6 @@ async def upload_news():
 
 @app.get("/update_news/")
 async def update_news():
-    df = generate_news(period='1M', category='health OR vaccine OR medicine OR disease')
+    df = generate_news(period='3d', category='(health OR vaccine OR medicine OR disease) (straitstimes OR cna)')
     df.to_json('News_Scraper/data/news.json', orient='records')
     return('News Updated.')
